@@ -32,7 +32,9 @@ For prerequisites, local development, Aspire, and shutdown instructions, see [Ge
 
 ## Important scope notes
 
-- The current active web entry point is still the Vite/React starter screen. A product manager component exists in the source tree but is not the active entry point yet.
+- The active web client is a responsive, Flowbite-inspired admin dashboard. Its sidebar links to the product and product-detail CRUD screens; the overview includes catalog and inventory summaries.
+- The toolbar notification drawer stores up to 100 recent items in browser local storage. Live product create/update/delete messages arrive over Socket.IO through RabbitMQ; product-detail changes are not broadcast to other clients.
+- The product-detail screen loads details through the per-product lookup endpoint. There is no endpoint to list every detail record, and the UI presents one returned record per product even though the database can store multiple detail rows for a product.
 - The API initializes PostgreSQL, Redis, and RabbitMQ at startup. If one is unavailable or misconfigured, the API exits rather than starting partially.
 - Swagger UI is available at `/api-docs`. Some generated OpenAPI annotations may lag the implemented product-detail fields; use the route implementation and [API examples](API_EXAMPLES.md) as the behavior reference.
 - Compose and Aspire are development setups with sample credentials, not production deployment configurations.

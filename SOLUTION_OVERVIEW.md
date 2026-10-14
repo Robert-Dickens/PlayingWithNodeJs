@@ -9,7 +9,8 @@ FullStackApp is a development scaffold for exploring a small product catalog sys
 - **REST API:** Express endpoints for products and product details, a health endpoint, Swagger UI, centralized error handling, and PostgreSQL initialization.
 - **Data services:** PostgreSQL stores the records; Redis caches product and product-detail lookups; RabbitMQ carries product lifecycle events.
 - **Real-time notifications:** API clients can subscribe to product changes over Socket.IO. Product service events are published through RabbitMQ and relayed to subscribed sockets.
-- **Web client:** React/Vite application scaffold with a product-management component in the source tree.
+- **Web client:** React/Vite admin dashboard with responsive navigation, overview metrics, and API-backed product and product-detail CRUD screens.
+- **Notification center:** Toolbar bell and right-side activity drawer show live product events and local product-detail activity. Up to 100 notifications are persisted in browser storage.
 - **Observability:** OpenTelemetry SDK/exporters, automatic instrumentation, custom API and WebSocket metrics, and Pino logging.
 - **Run options:** Docker Compose for the stack, or .NET Aspire for local orchestration and dashboard integration.
 
@@ -29,7 +30,9 @@ Product-detail operations use the database and invalidate detail caches on creat
 
 ## Current scope and limitations
 
-- The active React entry point renders the default Vite starter screen. The product-management component exists but is not currently wired into that entry point, so the browser UI should be considered a scaffold rather than a finished catalog interface.
+- Product lifecycle events are broadcast to connected Socket.IO clients through RabbitMQ; product-detail CRUD does not publish push events. The dashboard records detail changes made in that browser as local activity.
+- Notification history is browser-local and capped at 100 entries; it is not stored or synchronized by the API.
+- The product-detail UI loads one record per product through the current per-product lookup endpoint. The API does not expose a collection endpoint for listing all detail records, and the database permits multiple detail records for a product.
 - API validation is intentionally minimal. Create endpoints check required fields, but there is no comprehensive type/range validation or authentication/authorization.
 - Swagger UI is present, but some annotations/schema details can differ from route behavior. The examples in [API_EXAMPLES.md](API_EXAMPLES.md) describe the current implementation; the route files are authoritative.
 - Health reports the API process and does not test downstream dependencies. The API itself requires PostgreSQL, Redis, and RabbitMQ to initialize before it listens.

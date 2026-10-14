@@ -75,7 +75,7 @@ npm ci
 npm run dev
 ```
 
-Vite serves the app at <http://localhost:5173>. The web app reads `VITE_API_URL` for its API origin; the local Vite configuration defaults it to `http://localhost:3001`.
+Vite serves the dashboard at <http://localhost:5173>. The web app reads `VITE_API_URL` when set; by default, REST requests use `http://localhost:3001/api` and the Socket.IO connection uses `http://localhost:3001`. You can set the variable to either the API origin or its `/api` base path.
 
 ## Verify the API
 

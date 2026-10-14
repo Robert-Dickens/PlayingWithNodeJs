@@ -20,7 +20,7 @@ The web client and API are separate applications. PostgreSQL, Redis, and RabbitM
 
 ### Web app
 
-The `web/` project is React 19 with Vite, TypeScript, and Tailwind CSS. Vite's active HTML entry loads `src/main.jsx` and the starter `App.jsx`. A `ProductManager` component is present in `src/components/`, but the active entry does not render it yet. The API origin is configurable with `VITE_API_URL`.
+The `web/` project is React 19 with Vite, TypeScript, and Tailwind CSS. The active HTML entry loads `src/main.tsx`, which renders the responsive Flowbite-inspired catalog dashboard. Its sidebar navigates to the overview, `/api/products`, and `/api/product-details` management screens. The API URL is configurable with `VITE_API_URL`.
 
 ### API
 
@@ -41,7 +41,9 @@ PostgreSQL owns the `products` and `product_details` tables. Product detail rows
 
 Product create, update, and delete publish JSON messages to the RabbitMQ `product_events` topic exchange. The API consumes the product routing keys and relays them to clients in the Socket.IO `products` room. A client joins that room by emitting `subscribe_products`; the server responds with `subscribed` and emits `product:created`, `product:updated`, or `product:deleted` notifications.
 
-RabbitMQ routing keys use dot notation (for example, `product.created`); Socket.IO event names use a colon (for example, `product:created`). Product-detail changes are not currently broadcast through this pipeline.
+RabbitMQ routing keys use dot notation (for example, `product.created`); Socket.IO event names use a colon (for example, `product:created`). Product-detail changes are not currently broadcast through this pipeline. The web client displays product events in a toolbar notification drawer and stores up to 100 entries in browser local storage. Product-detail activity is recorded locally in the browser only.
+
+The product-detail screen fetches details for each product using `GET /api/product-details/product/:productId`. There is no endpoint for listing every detail row, so the UI displays the single record returned for each product; the database itself does not constrain a product to one detail row.
 
 ## Typical product-create flow
 
